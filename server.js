@@ -82,6 +82,19 @@ app.post('/api/exercise/add', function (req, res) {
   }
   });
 });
+app.get('/api/exercise/log', function(req, res){
+  let user_query_id = req.query.userId;
+  user.findById(user_query_id, function(error, result){
+    if(!error){
+      res.json({
+        count: result.log.length,
+        log: result
+      });
+    }else{
+      console.error(error);
+    }
+  })
+});
 
 
 
