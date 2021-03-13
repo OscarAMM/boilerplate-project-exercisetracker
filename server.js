@@ -83,6 +83,7 @@ app.post('/api/exercise/add', function (req, res) {
   }
   });
 });
+//function that gets logs user by id 
 app.get('/api/exercise/log', function(req, res){
   let user_query_id = req.query.userId;
   user.findById(user_query_id, function(error, result){
@@ -107,6 +108,7 @@ app.get('/api/exercise/log', function(req, res){
       if(req.query.limit){
         result.log = result.log.slice(0, req.query.limit)
       }
+      //returns json parameters from users
       res.json({
         _id: result.id,
         username: result.username,
