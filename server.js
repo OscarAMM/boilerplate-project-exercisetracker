@@ -87,19 +87,16 @@ app.get('/api/exercise/log', function(req, res){
   user.findById(user_query_id, function(error, result){
     if(!error){
       res.json({
+        _id: result.id,
+        username: result.username,
         count: result.log.length,
-        log: result
+        log: result.log
       });
     }else{
       console.error(error);
     }
   })
 });
-
-
-
-
-
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })
