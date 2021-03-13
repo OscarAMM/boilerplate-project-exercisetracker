@@ -3,7 +3,8 @@ const app = express()
 const cors = require('cors')
 require('dotenv').config()
 const mongoose = require('mongoose');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+const { request } = require('express');
 
 //database connections
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -86,6 +87,26 @@ app.get('/api/exercise/log', function(req, res){
   let user_query_id = req.query.userId;
   user.findById(user_query_id, function(error, result){
     if(!error){
+
+      if(req.query.from || req.query.to){
+        let fromDate = new Date(0);
+        let toDate = new Date();
+        if(req.query.from){
+          fromDate = new Date(req.query.from);
+        }
+        if(req.query.to){
+          toDate = new Date(req.query.to);
+        }
+        fromDate = fromDate.getTime();
+        toDate = toDate.getTime();
+        result.log = result.log.filter((session) => {
+          let sessionDate = new Date(session.date).getTime();
+          return sessionDate >= fromDate && sessionDate <= toDate;
+        })
+      }
+      if(req.query.limit){
+        result.log = result.log.slice(0, req.query.limit)
+      }
       res.json({
         _id: result.id,
         username: result.username,
